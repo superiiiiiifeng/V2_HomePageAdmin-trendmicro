@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomePage-Admin</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/css/index.css">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link href="/public/css/main.css" rel="stylesheet">
+
+</head>
+<body>
+<nav class="header-top">
+  <div class="container">
+    <div class="left">
+      <a href="/" class="left">
+        <img src="/public/images/logo-company-black.webp" height="33" alt="">
+      </a>
+    </div>
+    <a href="/file" class="file-manager">文件管理</a>
+    <div class="right">
+      {{ if user }}
+      <a href="#">Administrator：<span>{{ user.email }} </span></a>
+      <a href="/logout">退出</a>
+      {{ else }}
+      <a href="/login">登录</a>
+      {{ /if }}
+    </div>
+  </div>
+</nav>
+<div class="container">
+  {{ if user }}
+  <iframe src="http://localhost:8422" frameborder="0" width="100%" height="800px"></iframe>
+  {{ /if }}
+</div>
+
+<footer class="container">
+  <div class="copyright">
+    Copyright © 2021 Oka Apps Incorporated. All rights reserved.
+  </div>
+</footer>
+
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+
+
+</body>
+</html>

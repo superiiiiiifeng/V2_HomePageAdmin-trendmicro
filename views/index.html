@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomePage-Admin</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/css/index.css">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link href="/public/css/main.css" rel="stylesheet">
+</head>
+<body>
+<nav class="header-top">
+  <div class="container">
+    <div class="left">
+      <a href="/" class="left">
+        <img src="/public/images/logo-company-black.webp" height="33" alt="">
+      </a>
+      <a href="/file" class="file-manager">文件管理</a>
+    </div>
+    <div class="right">
+      {{ if user }}
+      <a href="#">Administrator：<span>{{ user.email }} </span></a>
+      <a href="/logout">退出</a>
+      {{ else }}
+      <a href="/login">登录</a>
+      {{ /if }}
+    </div>
+  </div>
+</nav>
+{{ if user }}
+<div class="container">
+      <h5><a class="btn btn-secondary createBtn" href="/new"><img src="/public/images/plus.svg" height="16" alt=""> Create New</a></h5>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm table-bordered">
+          <thead class="w-100">
+          <tr>
+            <th>#</th>
+            <th>appid</th>
+            <th>name</th>
+            <th>icon</th>
+            <th>language</th>
+            <th>edit</th>
+          </tr>
+          </thead>
+          <tbody class="w-100">
+          {{each apps}}
+          <tr>
+            <th class="align-middle">{{$index + 1}}</th>
+            <td class="align-middle">{{$value.appid}}</td>
+            <td class="align-middle">{{$value.name}}</td>
+            <td class="align-middle">
+              <img src="{{$value.icon_url}}" height="32" alt="">
+            </td>
+            <td class="align-middle">{{$value.language}}</td>
+            <td class="align-middle">
+              <a href="/edit?appid={{$value.appid}}" >修改</a>
+              <a href="/delete?appid={{$value.appid}}" >删除</a>
+            </td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+</div>
+{{ /if }}
+<footer class="container">
+  <div class="copyright">
+    Copyright © 2021 Oka Apps Incorporated. All rights reserved.
+  </div>
+</footer>
+
+
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+
+</body>
+</html>

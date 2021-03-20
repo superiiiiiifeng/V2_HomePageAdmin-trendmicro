@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomePage-Admin</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/css/index.css">
+  <link rel="icon" href="/public/images/favicon.ico">
+  <link href="/public/css/main.css" rel="stylesheet">
+
+</head>
+<body>
+<nav class="header-top">
+  <div class="container">
+    <div class="left">
+      <a href="/" class="left">
+        <img src="/public/images/logo-company-black.webp" height="33" alt="">
+      </a>
+      <a href="/file" class="file-manager">文件管理</a>
+    </div>
+    <div class="right">
+      {{ if user }}
+      <a href="#">Administrator：<span>{{ user.email }} </span></a>
+      <a href="/logout">退出</a>
+      {{ else }}
+      <a href="/login">登录</a>
+      {{ /if }}
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <form action="/editApp" method="POST" id="upLoad1" name="upLoad1" encType="multipart/form-data">
+    <input type="hidden" name="dd" value="{{app.appid}}">
+    <h3>Modify App</h3>
+    <div class="form-row">
+      <div class="form-group col-md-4 was-validated">
+        <label for="appid">appid</label>
+        <input type="text" value="{{app.appid}}" class="form-control" id="appid" name="appid" required minlength="1" onkeyup="keyAppid(this)">
+      </div>
+      <div class="form-group col-md-2">
+        <input type="hidden" class="type" value="{{app.type}}">
+        <label for="type">type</label>
+        <select id="type" name="type" required="required" class="form-control">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-2">
+        <input type="hidden" class="language" value="{{app.language}}">
+        <label for="language">language</label>
+        <select id="language"  name="language" required="required" class="form-control" onchange="keyLanguage(this)">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-4 was-validated">
+        <label for="name">name</label>
+        <input type="text" value="{{app.name}}" class="form-control" id="name" name="name" required minlength="1">
+      </div>
+    </div>
+    <div class="form-row was-validated">
+      <div class="form-group col-md-6">
+        <label for="title1">title</label>
+        <input type="text" value="{{app.title}}" class="form-control" id="title1" name="title" required minlength="1">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="subtitle">subtitle</label>
+        <input type="text" value="{{app.subtitle}}" class="form-control" id="subtitle" name="subtitle" required minlength="1">
+      </div>
+      <div class="form-group col-md-12">
+        <input type="hidden" class="description1" value="{{app.description}}">
+        <label for="description1">description</label>
+        <textarea class="form-control" id="description1" name="description" required minlength="1" rows="5"></textarea>
+      </div>
+    </div>
+    <div class="form-row was-validated">
+      <div class="form-group col-md-6">
+        <label for="store_download_link">store_download_link</label>
+        <input type="text" value="{{app.store_download_link}}" class="form-control" id="store_download_link" name="store_download_link" required minlength="1">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="download_link">download_link</label>
+        <input type="text" value="{{app.download_link}}" class="form-control" id="download_link" name="download_link" required minlength="1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <label for="detail_img_url">detail_img_url</label><br>
+        <input type="file" id="detail_img_url" name="detail_img_url" accept="image/jpg,image/jpeg,image/png,image/gif" onchange="uploadUrl(this,'/public/img/App')">
+      </div>
+      <div class="form-group col-md-4">
+        <label>detail_img_url_path</label>
+        <input type="text" class="form-control detail_img_url_path" id="detail_img_url_backup" name="detail_img_url_backup" required value="{{app.detail_img_url}}">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="slider_bg_url">slider_bg_url</label><br>
+        <input type="file" id="slider_bg_url" name="slider_bg_url" accept="image/jpg,image/jpeg,image/png,image/gif" onchange="uploadUrl(this,'/public/img/App')">
+      </div>
+      <div class="form-group col-md-4">
+        <label>slider_bg_url_path</label>
+        <input type="text" class="form-control slider_bg_url_path" id="slider_bg_url_backup" name="slider_bg_url_backup" required value="{{app.slider_bg_url}}">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="icon_url">icon_url</label><br>
+        <input type="file" id="icon_url" name="icon_url" accept="image/jpg,image/jpeg,image/png,image/gif" onchange="uploadUrl(this,'/public/img/App')">
+      </div>
+      <div class="form-group col-md-4">
+        <label>icon_url_path</label>
+        <input type="text" class="form-control icon_url_path" id="icon_url_backup" name="icon_url_backup" required value="{{app.icon_url}}">
+      </div>
+      <div class="form-group col-md-2">
+        <input type="hidden" class="enable_slide" value="{{app.enable_slide}}">
+        <label for="enable_slide">enable_slide</label>
+        <select id="enable_slide" name="enable_slide" required="required" class="form-control">
+          <option selected>false</option>
+          <option>true</option>
+        </select>
+      </div>
+      <div class="form-group col-md-12">
+        <hr>
+      </div>
+    </div>
+  </form>
+  <form action="/editAppComment" method="POST" id="upLoad2" name="upLoad2" class="was-validated" encType="multipart/form-data">
+    <h3>Modify AppComment</h3>
+    <input type="hidden" name="dd" value="{{app.appid}}">
+    <h5><span class="btn btn-secondary createBtn AppComment"><img src="/public/images/plus.svg" height="16" alt=""> Create</span></h5>
+    {{each appComment}}
+    <div class="form-row">
+      <div class="form-group col-md-3 d-md-none">
+        <label for="appid_backup1">appid</label>
+        <input type="text" value="{{appComment[$index].appid}}" class="form-control appid_backup" id="appid_backup1" name="appid" required minlength="1">
+      </div>
+      <div class="form-group col-md-2 d-md-none">
+        <input type="hidden" class="language_backup1" value="{{appComment[$index].language}}">
+        <label for="language_backup1">language</label>
+        <select id="language_backup1"  name="language" required="required" class="form-control language_backup">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="username">username</label>
+        <input type="text" value="{{appComment[$index].username}}" class="form-control" id="username" name="username" required minlength="1">
+      </div>
+      <div class="form-group col-md-8">
+        <input type="hidden" class="content1" value="{{appComment[$index].content}}">
+        <label for="content1">content</label>
+        <textarea class="form-control" id="content1" name="content" required minlength="1" rows="5"></textarea>
+        <div class="deleteBtn"><span class="btn btn-secondary createBtn"><img src="/public/images/minus.svg" height="16" alt=""> Delete</span></div>
+      </div>
+      <div class="form-group col-md-12">
+        <hr>
+      </div>
+    </div>
+    {{/each}}
+  </form>
+  <form action="/editAppFeature" method="POST" id="upLoad3" name="upLoad3" encType="multipart/form-data">
+    <h3>Modify AppFeature</h3>
+    <input type="hidden" name="dd" value="{{app.appid}}">
+    <h5><span class="btn btn-secondary createBtn AppFeature"><img src="/public/images/plus.svg" height="16" alt=""> Create</span></h5>
+    {{each appFeature}}
+    <div class="form-row">
+      <div class="form-group col-md-3 d-md-none">
+        <label for="appid_backup2">appid</label>
+        <input type="text" value="{{appFeature[$index].appid}}" class="form-control appid_backup" id="appid_backup2" name="appid" required minlength="1">
+      </div>
+      <div class="form-group col-md-2 d-md-none">
+        <input type="hidden" class="language_backup2" value="{{appFeature[$index].language}}">
+        <label for="language_backup2">language</label>
+        <select id="language_backup2"  name="language" required="required" class="form-control language_backup">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6 was-validated">
+        <label for="title2">title</label>
+        <input type="text" value="{{appFeature[$index].title}}" class="form-control" id="title2" name="title" required minlength="1">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="feature_icon_url">feature_icon_url</label><br>
+        <input type="file" id="feature_icon_url" name="feature_icon_url" accept="image/jpg,image/jpeg,image/png,image/gif" onchange="uploadUrl(this,'/public/img/AppFeature')">
+      </div>
+      <div class="form-group col-md-4">
+        <label>feature_icon_url_path</label>
+        <input type="text" class="form-control feature_icon_url_path" id="feature_icon_url_backup" name="feature_icon_url_backup" required value="{{appFeature[$index].feature_icon_url}}">
+      </div>
+      <div class="form-group col-md-11 was-validated">
+        <input type="hidden" class="description2" value="{{appFeature[$index].description}}">
+        <label for="description2">description</label>
+        <textarea class="form-control" id="description2" name="description" rows="3" required minlength="1"></textarea>
+        <div class="deleteBtn"><span class="btn btn-secondary createBtn"><img src="/public/images/minus.svg" height="16" alt=""> Delete</span></div>
+      </div>
+      <div class="form-group col-md-12">
+        <hr>
+      </div>
+    </div>
+    {{/each}}
+  </form>
+  <form action="/editBlog" method="POST" id="upLoad4" name="upLoad4" encType="multipart/form-data">
+    <h3>Modify Blog</h3>
+    <input type="hidden" name="dd" value="{{app.appid}}">
+    <h5><span class="btn btn-secondary createBtn Blog"><img src="/public/images/plus.svg" height="16" alt=""> Create</span></h5>
+    {{each blog}}
+    <div class="form-row">
+      <div class="form-group col-md-3 d-md-none">
+        <label for="appid_backup3">appid</label>
+        <input type="text" value="{{blog[$index].appid}}" class="form-control appid_backup" id="appid_backup3" name="appid" required minlength="1">
+      </div>
+      <div class="form-group col-md-2 d-md-none">
+        <input type="hidden" class="language_backup3" value="{{blog[$index].language}}">
+        <label for="language_backup3">language</label>
+        <select id="language_backup3" name="language" required="required" class="form-control language_backup">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6 was-validated">
+        <label for="title3">title</label>
+        <input type="text" value="{{blog[$index].title}}" class="form-control" id="title3" name="title" required minlength="1">
+      </div>
+      <div class="form-group col-md-2">
+        <input type="hidden" class="sex" value="{{blog[$index].sex}}">
+        <label for="sex">sex: 0-male, 1-female</label>
+        <select id="sex"  name="sex" required="required" class="form-control">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-11 was-validated">
+        <label for="content2">content</label>
+        <input type="text" value="{{blog[$index].content}}" class="form-control" id="content2" name="content" required minlength="1">
+      </div>
+      <div class="form-group col-md-3 was-validated">
+        <label for="creator">creator</label>
+        <input type="text" value="{{blog[$index].creator}}" class="form-control" id="creator" name="creator" required minlength="1">
+      </div>
+      <div class="form-group col-md-3 was-validated">
+        <label for="tags">tags</label>
+        <input type="text" value="{{blog[$index].tags}}" class="form-control" id="tags" name="tags" required minlength="1">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="thumbnail_url">thumbnail_url</label><br>
+        <input type="file" id="thumbnail_url" name="thumbnail_url" accept="image/jpg,image/jpeg,image/png,image/gif" onchange="uploadUrl(this,'/public/img/Blog')">
+      </div>
+      <div class="form-group col-md-4">
+        <label>thumbnail_url_path</label>
+        <input type="text" class="form-control thumbnail_url_path" id="thumbnail_url_backup" name="thumbnail_url_backup" required value="{{blog[$index].thumbnail_url}}">
+      </div>
+      <div class="form-group col-md-11 was-validated">
+        <input type="hidden" class="description3" value="{{blog[$index].description}}">
+        <label for="description3">description</label>
+        <textarea class="form-control" id="description3" name="description" rows="3" required minlength="1"></textarea>
+        <div class="deleteBtn"><span class="btn btn-secondary createBtn"><img src="/public/images/minus.svg" height="16" alt=""> Delete</span></div>
+      </div>
+      <div class="form-group col-md-12">
+        <hr>
+      </div>
+    </div>
+    {{/each}}
+  </form>
+  <form action="/editFAQ" method="POST" id="upLoad5" name="upLoad5" class="was-validated" encType="multipart/form-data">
+    <h3>Modify FAQ</h3>
+    <input type="hidden" name="dd" value="{{app.appid}}">
+    <h5><span class="btn btn-secondary createBtn FAQ"><img src="/public/images/plus.svg" height="16" alt=""> Create</span></h5>
+    {{each faq}}
+    <div class="form-row">
+      <div class="form-group col-md-3 d-md-none">
+        <label for="appid_backup4">appid</label>
+        <input type="text" value="{{faq[$index].appid}}" class="form-control appid_backup" id="appid_backup4" name="appid" required minlength="1">
+      </div>
+      <div class="form-group col-md-2 d-md-none">
+        <input type="hidden" class="language_backup4" value="{{faq[$index].language}}">
+        <label for="language_backup4">language</label>
+        <select id="language_backup4"  name="language" required="required" class="form-control language_backup">
+          <option selected>0</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div class="form-group col-md-11">
+        <label for="question">question</label>
+        <input type="text" value="{{faq[$index].question}}" class="form-control" id="question" name="question" required minlength="1">
+      </div>
+      <div class="form-group col-md-11">
+        <input type="hidden" class="answer" value="{{faq[$index].answer}}">
+        <label for="answer">answer</label>
+        <textarea class="form-control" id="answer" name="answer" rows="3" required minlength="1"></textarea>
+        <div class="deleteBtn"><span class="btn btn-secondary createBtn"><img src="/public/images/minus.svg" height="16" alt=""> Delete</span></div>
+      </div>
+      <div class="form-group col-md-12">
+        <hr>
+      </div>
+    </div>
+    {{/each}}
+  </form>
+
+  <button type="submit" id="btnUpload" class="btn btn-primary">Save</button>
+  <a class="btn btn-secondary" href="/">View All</a>
+</div>
+
+
+<footer class="container">
+  <div class="copyright">
+    Copyright © 2021 Oka Apps Incorporated. All rights reserved.
+  </div>
+</footer>
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/public/js/cd.js"></script>
+
+<script>
+  function keyAppid(v){
+    $('.appid_backup').val(v.value);
+  }
+  function keyLanguage(v){
+    $('.language_backup').val(v.value);
+  }
+  function uploadUrl(v,str) {
+    var pathArray = $(v).val().split('\\');
+    var fileName = pathArray[pathArray.length-1];
+    var ele = $(v).parent().next().children()[1];
+    $(ele).val(str+fileName.replace('.jpg','.webp').replace('.png','.webp'))
+  }
+
+  $('#enable_slide').val($('.enable_slide').val());
+  $('#language').val($('.language').val());
+  // $('#language_backup1').val($('.language_backup1').val());
+  // $('#language_backup2').val($('.language_backup2').val());
+  // $('#language_backup3').val($('.language_backup3').val());
+  // $('#language_backup4').val($('.language_backup4').val());
+  // console.log(document.querySelectorAll('#language_backup1'));
+  document.querySelectorAll('#language_backup1').forEach(function (el) {
+    el.value = $('.language_backup1').val()
+  });
+  document.querySelectorAll('#language_backup2').forEach(function (el) {
+    el.value = $('.language_backup2').val()
+  });
+  document.querySelectorAll('#language_backup3').forEach(function (el) {
+    el.value = $('.language_backup3').val()
+  });
+  document.querySelectorAll('#language_backup4').forEach(function (el) {
+    el.value = $('.language_backup4').val()
+  });
+  // $('#type').val($('.type').val());
+  // $('#sex').val($('.sex').val());
+  document.querySelectorAll('#type').forEach(function (el) {
+    el.value = $('.type').val()
+  });
+  document.querySelectorAll('#sex').forEach(function (el) {
+    el.value = $('.sex').val()
+  });
+
+  $('#description1').val($('.description1').val());
+  // $('#content1').val($('.content1').val());
+  document.querySelectorAll('#content1').forEach(function (el) {
+    el.value = el.previousSibling.previousSibling.previousSibling.previousSibling.value;
+  });
+  document.querySelectorAll('#description2').forEach(function (el) {
+    el.value = el.previousSibling.previousSibling.previousSibling.previousSibling.value;
+  });
+  document.querySelectorAll('#description3').forEach(function (el) {
+    el.value = el.previousSibling.previousSibling.previousSibling.previousSibling.value;
+  });
+  document.querySelectorAll('#answer').forEach(function (el) {
+    el.value = el.previousSibling.previousSibling.previousSibling.previousSibling.value;
+  });
+
+  $('#btnUpload').click(function () {
+    $('#upLoad1').submit();
+    setTimeout(function () {
+      $('#upLoad2').submit();
+      console.log('finished1');
+    },100);
+    setTimeout(function () {
+      $('#upLoad3').submit();
+      console.log('finished2');
+    },200);
+    setTimeout(function () {
+      $('#upLoad4').submit();
+      console.log('finished3');
+    },300);
+    setTimeout(function () {
+      $('#upLoad5').submit();
+      console.log('finished4');
+    },400)
+  })
+
+
+</script>
+</body>
+</html>

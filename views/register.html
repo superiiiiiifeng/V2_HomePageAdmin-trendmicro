@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>HomePage-Admin</title>
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <link href="/public/css/registerin.css" rel="stylesheet">
+
+  </head>
+
+  <body class="text-center">
+    <form class="form-registerin" action="/register" method="post">
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" name="email" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword1" class="form-control" name="password" placeholder="Password" required>
+        <label for="inputPassword" class="sr-only">Re-enter password</label>
+        <input type="password" id="inputPassword2" class="form-control" placeholder="Re-enter Password" required>
+        <br>
+        <div class="checkbox mb-3">
+            <label>
+            <input type="checkbox" class="check"> I confirm
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+        <br>
+        <p class="ppp">
+            已有账号?
+            <a href="/login" style="text-decoration: none;">点击登录</a>
+        </p>
+        <p class="mt-5 mb-3 text-muted">&copy; trendmicro.com</p>
+    </form>
+
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script>
+
+    $('.form-registerin').on('submit',function(e) {
+        e.preventDefault();// 按照过去的方法得到post提交的数据，则此处不可阻止表单的默认行为
+        if($('.check')[0].checked===false) {
+            return alert('Please click the checkbox to confirm before submitting!')
+        }
+        if($('#inputPassword1').val()!==$('#inputPassword2').val()) {
+           return alert('\n' +
+               'The two password are different, please re-enter!')
+        }
+
+        var formData=$(this).serialize()
+        $.ajax({
+            url:'/register',
+            type:'post',
+            data:formData,
+            dataType:'json',
+            success:function(data) {
+                var code=data.errCode;
+                if(code===0) {
+                    alert('恭喜您注册成功!');
+                    window.location.href='/login';
+                } else if(code===1) {
+                    alert('您的邮箱已被注册,注册失败!')
+                } else if(code===500) {
+                    alert('服务器忙,请稍后重试!')
+                } 
+            }
+        })
+    })
+</script>
+</body>
+</html>
